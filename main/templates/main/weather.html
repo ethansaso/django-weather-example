@@ -77,10 +77,15 @@
     // Function to handle switching units and submitting the form
     function switchUnit() {
         // Find city name from current-city span
-        const city = document.getElementById('current-city');
-        
-        // Submit the form with the new units
-        document.getElementById('weather-form').submit();
+        const city = window.location.pathname.slice(1);
+
+        // Get units (or empty string if not specified)
+        const queryString = window.location.search;
+        const unitsParam = new URLSearchParams(queryString).get('units');
+        const newUnits = unitsParam === 'metric' ? 'standard' : 'metric';
+
+        const newUrl = `/${city}?units=${newUnits}`;
+        window.location.href = newUrl;
     }
   </script>
 </body>

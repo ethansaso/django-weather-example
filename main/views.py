@@ -30,7 +30,7 @@ def weather(request, city):
                 "humidity": str(list_of_data['main']['humidity']), 
             }
         except HTTPError:
-            data = {"error": '404', "city": city}
+            data = {"error": '404', "city": urllib.parse.unquote(city).title()}
     else:
         data = {}
     return render(request, "main/weather.html", data)
