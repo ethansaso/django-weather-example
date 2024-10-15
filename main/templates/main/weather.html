@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Django Weather App</title>
+  <!-- Latest compiled and minified CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <!-- Latest compiled JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+  <nav class="row" style="background: green; color: white;">
+    <h1 class="col-md-3 text-center">Weather</h1>
+  </nav>
+  <br />
+  <br />
+  <div class="row">
+    <form method="get" class="col-md-6 col-md-offset-3 mx-auto mb-3" id="weather-form" onsubmit="handleFormSubmit(event)">
+      <div class="input-group">
+        <input type="text" class="form-control" name="city" id="city-input" placeholder="Search">
+        <input type="hidden" name="units" id="units-input" value="standard">
+        <div class="input-group-btn">
+          <button class="btn btn-default" type="submit">
+            <i class="glyphicon glyphicon-search"></i>
+          </button>
+        </div>
+    </form>
+    </div>
+  <div class="row">
+    {% if error and city %}
+    <div class="col-md-6 col-md-offset-3 mx-auto">
+        <div class="alert alert-danger">Could not find city '{{city}}'</div>
+    </div>
+    {% endif %}
+    {% if city and country_code and coordinate and temp and pressure and humidity %}
+    <div class="col-md-6 col-md-offset-3 mx-auto">
+        <h3>Showing details for <span id="current-city">{{city}}</span></h3>
+        <h5>country code : {{country_code}}</h5>
+        <h5>coordinate : {{coordinate}}</h5>
+        <h5>temp : {{temp}}</h5>
+        <h5>pressure : {{pressure}} </h5>
+        <h5>humidity : {{humidity}}</h5>
+        <div class="d-flex">
+            <button onclick="switchUnit()" type="button">
+                Click me! (Kelvin to Celsius)
+            </button>
+        </div>
+    </div>
+    {% endif %}
+  </div>
+
+  <script>
+// Custom form submission
+    function handleFormSubmit(event) {
+        event.preventDefault();  // Prevent default form submission
+
+        // Get the city and units from the form
+        const city = document.getElementById('city-input').value.trim().replace(/\s+/g, '-');  // Replace spaces with dashes for URL
+        const units = document.getElementById('units-input').value;
+
+        // Build the URL with city and units as a query parameter
+        const url = `/${city}?units=${units}`;
+
+        // Redirect the browser to the new URL
+        window.location.href = url;
+
+        console.log('hi!')
+    }
+
+    // Function to handle switching units and submitting the form
+    function switchUnit() {
+        // Find city name from current-city span
+        const city = document.getElementById('current-city');
+        
+        // Submit the form with the new units
+        document.getElementById('weather-form').submit();
+    }
+  </script>
+</body>
+
+</html>
